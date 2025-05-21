@@ -3,78 +3,73 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function Hero() {
-  return (
-    <section className="relative h-[calc(100vh-64px)] min-h-[600px] w-full">
-      {/* Background Image with Gradient Overlay */}
-      <div className="absolute inset-0">
-        <Image
-          src="https://images.unsplash.com/photo-1504674900247-0877df9cc836"
-          alt="Mexican Food"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
-      </div>
+interface HeroProps {
+  scrollToMenu: () => void;
+}
 
+export default function Hero({ scrollToMenu }: HeroProps) {
+  return (
+    <section className="relative h-[calc(100vh-64px)] min-h-[600px] w-full bg-white">
       {/* Content */}
       <div className="relative h-full">
         <div className="container mx-auto px-4 h-full">
-          <div className="flex flex-col justify-center items-center h-full text-center text-white">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
+          <div className="flex flex-col justify-center items-center h-full text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in text-gray-900">
               Authentic Mexican Cuisine
               <br />
-              <span className="text-orange-400">Delivered to You</span>
+              <span className="text-[#FF0000]">Delivered to You</span>
             </h1>
             
-            <p className="text-lg md:text-xl mb-8 max-w-2xl animate-fade-in-up opacity-90">
+            <p className="text-lg md:text-xl mb-2 max-w-2xl animate-fade-in-up text-gray-600">
               Experience the rich flavors of Mexico with our handcrafted dishes,
               <br className="hidden md:block" />
               made from fresh, locally-sourced ingredients.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up">
-              <Link
-                href="/menu"
-                className="bg-orange-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-orange-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-orange-600/30"
+            <p className="text-lg md:text-xl mb-8 max-w-2xl animate-fade-in-up text-gray-600 flex items-center justify-center gap-2">
+              <svg
+                className="w-6 h-6 text-[#FF0000]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              Deliver to <span className="text-[#FF0000] font-semibold">Islamabad G8 Markaz</span>
+            </p>
+
+            <div className="flex flex-col md:flex-row gap-4 animate-fade-in-up mb-24">
+              <button
+                onClick={scrollToMenu}
+                className="bg-[#FF0000] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#CC0000] transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-[#FF0000]/30"
               >
                 Order Now
-              </Link>
-              <Link
-                href="/menu"
-                className="bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 px-8 py-3 rounded-full font-semibold hover:bg-white/20 transform hover:scale-105 transition-all duration-300"
+              </button>
+              <button
+                onClick={scrollToMenu}
+                className="bg-[#FF0000]/10 backdrop-blur-sm text-[#FF0000] border-2 border-[#FF0000] px-8 py-3 rounded-full font-semibold hover:bg-[#FF0000]/20 transform hover:scale-105 transition-all duration-300"
               >
                 View Menu
-              </Link>
+              </button>
             </div>
 
             {/* Features */}
             <div className="absolute bottom-8 left-0 right-0 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
               <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 max-w-5xl mx-auto">
-                  <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-500/50 transition-colors duration-300">
-                    <div className="text-orange-400 mb-2">
-                      <svg
-                        className="w-8 h-8 mx-auto"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold">Fast Delivery</h3>
-                    <p className="text-sm text-gray-200">30 mins or free</p>
-                  </div>
-                  <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-500/50 transition-colors duration-300">
-                    <div className="text-orange-400 mb-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                  <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100 hover:border-[#FF0000]/50 transition-colors duration-300">
+                    <div className="text-[#FF0000] mb-4">
                       <svg
                         className="w-8 h-8 mx-auto"
                         fill="none"
@@ -89,11 +84,11 @@ export default function Hero() {
                         />
                       </svg>
                     </div>
-                    <h3 className="font-semibold">Fresh Ingredients</h3>
-                    <p className="text-sm text-gray-200">Locally sourced</p>
+                    <h3 className="font-semibold mb-2 text-gray-900">Fresh Ingredients</h3>
+                    <p className="text-sm text-gray-600">Locally sourced</p>
                   </div>
-                  <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-500/50 transition-colors duration-300">
-                    <div className="text-orange-400 mb-2">
+                  <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100 hover:border-[#FF0000]/50 transition-colors duration-300">
+                    <div className="text-[#FF0000] mb-4">
                       <svg
                         className="w-8 h-8 mx-auto"
                         fill="none"
@@ -108,8 +103,27 @@ export default function Hero() {
                         />
                       </svg>
                     </div>
-                    <h3 className="font-semibold">Best Prices</h3>
-                    <p className="text-sm text-gray-200">Value for money</p>
+                    <h3 className="font-semibold mb-2 text-gray-900">Best Prices</h3>
+                    <p className="text-sm text-gray-600">Value for money</p>
+                  </div>
+                  <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-100 hover:border-[#FF0000]/50 transition-colors duration-300">
+                    <div className="text-[#FF0000] mb-4">
+                      <svg
+                        className="w-8 h-8 mx-auto"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold mb-2 text-gray-900">Fast Delivery</h3>
+                    <p className="text-sm text-gray-600">30 mins or less</p>
                   </div>
                 </div>
               </div>
@@ -118,7 +132,7 @@ export default function Hero() {
             {/* Scroll Indicator */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
               <svg
-                className="w-6 h-6 text-white/50"
+                className="w-6 h-6 text-[#FF0000]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

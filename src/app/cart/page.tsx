@@ -4,14 +4,37 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
+import { useEffect } from 'react';
 
 export default function CartPage() {
   const { items, total, updateQuantity, removeItem } = useCart();
   const router = useRouter();
 
-  const handleCheckout = () => {
-    console.log('Checkout clicked');
-    router.push('/payment');
+  useEffect(() => {
+    // Cleanup function
+    return () => {
+      // Any cleanup needed when component unmounts
+    };
+  }, []);
+
+  const handleCheckout = async () => {
+    try {
+      // Add any pre-checkout logic here if needed
+      await router.push('/payment');
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Optionally show an error message to the user
+    }
+  };
+
+  const handleQuantityUpdate = (id: string, newQuantity: number) => {
+    if (newQuantity >= 0) {
+      updateQuantity(id, newQuantity);
+    }
+  };
+
+  const handleRemoveItem = (id: string) => {
+    removeItem(id);
   };
 
   if (items.length === 0) {
@@ -38,7 +61,7 @@ export default function CartPage() {
             Looks like you haven't added any items to your cart yet.
           </p>
           <Link
-            href="/menu"
+            href="/#menu-section"
             className="inline-block bg-orange-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-orange-700 transition-colors"
           >
             Browse Menu
@@ -58,26 +81,29 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
+            {items && items.length > 0 && items.map((item) => (
               <div
-                key={item.id}
+                key={`cart-item-${item.id}`}
                 className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm flex gap-4"
               >
                 <div className="relative w-24 h-24 flex-shrink-0">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    fill
-                    className="object-cover rounded-lg"
-                  />
+                  {item.imageUrl && (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name || 'Product image'}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  )}
                 </div>
                 <div className="flex-grow">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {item.name}
+                      {item.name || 'Unnamed product'}
                     </h3>
                     <button
-                      onClick={() => removeItem(item.id)}
+                      type="button"
+                      onClick={() => item.id && handleRemoveItem(item.id)}
                       className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <svg
@@ -98,23 +124,25 @@ export default function CartPage() {
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        type="button"
+                        onClick={() => item.id && handleQuantityUpdate(item.id, (item.quantity || 1) - 1)}
                         className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         -
                       </button>
                       <span className="w-8 text-center text-gray-900 dark:text-white">
-                        {item.quantity}
+                        {item.quantity || 0}
                       </span>
                       <button
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        type="button"
+                        onClick={() => item.id && handleQuantityUpdate(item.id, (item.quantity || 1) + 1)}
                         className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         +
                       </button>
                     </div>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      Rs {((item.price || 0) * (item.quantity || 1))}
                     </span>
                   </div>
                 </div>
@@ -131,16 +159,16 @@ export default function CartPage() {
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>Subtotal</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>Rs {total}</span>
                 </div>
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>Delivery Fee</span>
-                  <span>$5.00</span>
+                  <span>Rs 100</span>
                 </div>
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
                   <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
                     <span>Total</span>
-                    <span>${(total + 5).toFixed(2)}</span>
+                    <span>Rs {(total + 100)}</span>
                   </div>
                 </div>
               </div>

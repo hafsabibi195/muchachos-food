@@ -62,8 +62,8 @@ export default function AdminProductTable({
                   {product.category}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                ${product.price.toFixed(2)}
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                Rs {product.price}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                 <button

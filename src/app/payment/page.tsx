@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/contexts/CartContext';
-import Script from 'next/script';
-import { Fragment } from 'react';
+import dynamic from 'next/dynamic';
 
 type PaymentMethod = 'card' | 'cash';
 
@@ -19,9 +18,19 @@ const ISLAMABAD_CENTER = {
   lng: 73.0479
 };
 
+// Dynamically import the Map component with no SSR
+const MapComponent = dynamic(() => import('@/components/MapComponent'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[300px] rounded-lg overflow-hidden mb-2 border-2 border-gray-200 dark:border-gray-700 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+    </div>
+  ),
+});
+
 declare global {
   interface Window {
-    initMap: () => void;
+    google: typeof google;
   }
 }
 
@@ -32,10 +41,6 @@ export default function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
   const [addressError, setAddressError] = useState('');
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const googleMapRef = useRef<google.maps.Map | null>(null);
-  const markerRef = useRef<google.maps.Marker | null>(null);
   
   // Address form state
   const [address, setAddress] = useState({
@@ -50,127 +55,13 @@ export default function PaymentPage() {
     }
   }, [items.length, router]);
 
-  // Initialize map when the script is loaded
-  const initializeMap = () => {
-    console.log('Initializing map...');
-    
-    try {
-      if (!mapRef.current || typeof google === 'undefined') {
-        console.log('Map initialization failed:', {
-          mapRefExists: !!mapRef.current,
-          googleExists: typeof google !== 'undefined'
-        });
-        return;
-      }
-
-      // Clear any existing map instance
-      if (googleMapRef.current) {
-        // @ts-ignore
-        googleMapRef.current = null;
-      }
-      if (markerRef.current) {
-        markerRef.current.setMap(null);
-        // @ts-ignore
-        markerRef.current = null;
-      }
-
-      console.log('Creating map instance...');
-      const map = new google.maps.Map(mapRef.current, {
-        center: ISLAMABAD_CENTER,
-        zoom: 12,
-        styles: [
-          {
-            featureType: "poi",
-            elementType: "labels",
-            stylers: [{ visibility: "off" }]
-          }
-        ]
-      });
-
-      const marker = new google.maps.Marker({
-        map,
-        draggable: true,
-        position: ISLAMABAD_CENTER
-      });
-
-      // Update location when marker is dragged
-      marker.addListener('dragend', () => {
-        const position = marker.getPosition();
-        if (position) {
-          setSelectedLocation({
-            lat: position.lat(),
-            lng: position.lng()
-          });
-          updateAddressFromCoordinates(position.lat(), position.lng());
-        }
-      });
-
-      // Update marker position when map is clicked
-      map.addListener('click', (e: google.maps.MapMouseEvent) => {
-        const position = e.latLng;
-        if (position) {
-          marker.setPosition(position);
-          setSelectedLocation({
-            lat: position.lat(),
-            lng: position.lng()
-          });
-          updateAddressFromCoordinates(position.lat(), position.lng());
-        }
-      });
-
-      googleMapRef.current = map;
-      markerRef.current = marker;
-      setIsMapLoaded(true);
-    } catch (error) {
-      console.error('Error initializing map:', error);
-      setIsMapLoaded(false);
-    }
+  const handleLocationSelect = (location: Location, formattedAddress: string) => {
+    setSelectedLocation(location);
+    setAddress(prev => ({
+      ...prev,
+      address: formattedAddress
+    }));
   };
-
-  // Get address from coordinates using reverse geocoding
-  const updateAddressFromCoordinates = async (lat: number, lng: number) => {
-    if (typeof google === 'undefined') return;
-
-    try {
-      const geocoder = new google.maps.Geocoder();
-      const response = await geocoder.geocode({
-        location: { lat, lng }
-      });
-
-      if (response.results[0]) {
-        const formattedAddress = response.results[0].formatted_address;
-        setAddress(prev => ({
-          ...prev,
-          address: formattedAddress
-        }));
-      }
-    } catch (error) {
-      console.error('Error getting address:', error);
-    }
-  };
-
-  // Make initMap available globally
-  useEffect(() => {
-    // Set up initMap
-    window.initMap = initializeMap;
-
-    // Cleanup function
-    return () => {
-      // Clean up map instance
-      if (googleMapRef.current) {
-        // @ts-ignore
-        googleMapRef.current = null;
-      }
-      if (markerRef.current) {
-        // @ts-ignore
-        markerRef.current = null;
-      }
-      // Reset the global initMap
-      window.initMap = () => {};
-      // Reset map loaded state
-      setIsMapLoaded(false);
-    };
-  }, []);
 
   const validateAddress = () => {
     if (!address.fullName.trim()) {
@@ -195,6 +86,11 @@ export default function PaymentPage() {
 
   const handlePayment = async () => {
     if (!validateAddress()) {
+      // Scroll to the error message
+      const errorElement = document.querySelector('.text-red-500');
+      if (errorElement) {
+        errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
 
@@ -220,16 +116,6 @@ export default function PaymentPage() {
   };
 
   return (
-    <Fragment>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMap`}
-        strategy="afterInteractive"
-        onError={(e) => {
-          console.error('Error loading Google Maps:', e);
-          setIsMapLoaded(false);
-        }}
-      />
-      
       <div className="min-h-[calc(100vh-64px)] pt-24 pb-16 px-4">
         <div className="container mx-auto max-w-2xl">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
@@ -253,16 +139,11 @@ export default function PaymentPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Pin Your Location
                 </label>
-                <div 
-                  ref={mapRef} 
-                  className="w-full h-[300px] rounded-lg overflow-hidden mb-2 border-2 border-gray-200 dark:border-gray-700"
-                  style={{ position: 'relative', background: '#f0f0f0' }}
-                >
-                  {!isMapLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
-                    </div>
-                  )}
+                <div className="relative">
+                  <MapComponent
+                    center={ISLAMABAD_CENTER}
+                    onLocationSelect={handleLocationSelect}
+                  />
                 </div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Click on the map or drag the marker to set your exact location
@@ -333,7 +214,7 @@ export default function PaymentPage() {
                     </span>
                   </div>
                   <span className="text-gray-900 dark:text-white font-medium">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    Rs {(item.price * item.quantity)}
                   </span>
                 </div>
               ))}
@@ -343,16 +224,16 @@ export default function PaymentPage() {
             <div className="space-y-2 mb-6">
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <span>Rs {total}</span>
               </div>
               <div className="flex justify-between text-gray-600 dark:text-gray-400">
                 <span>Delivery Fee</span>
-                <span>$5.00</span>
+                <span>Rs 100</span>
               </div>
               <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
                 <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
                   <span>Total</span>
-                  <span>${(total + 5).toFixed(2)}</span>
+                  <span>Rs {(total + 100)}</span>
                 </div>
               </div>
             </div>
@@ -500,6 +381,5 @@ export default function PaymentPage() {
           </div>
         </div>
       </div>
-    </Fragment>
   );
 } 

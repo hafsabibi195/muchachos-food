@@ -71,6 +71,14 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const item = state.items.find(item => item.id === action.payload.id);
       if (!item) return state;
 
+      if (action.payload.quantity < 1) {
+        return {
+          ...state,
+          items: state.items.filter(item => item.id !== action.payload.id),
+          total: state.total - (item.price * item.quantity),
+        };
+      }
+
       const quantityDiff = action.payload.quantity - item.quantity;
 
       return {
@@ -102,18 +110,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   });
 
   const addItem = (item: Omit<CartItem, 'quantity'>) => {
+    if (!item || !item.id) return;
     dispatch({ type: 'ADD_ITEM', payload: item });
   };
 
   const removeItem = (id: string) => {
+    if (!id) return;
     dispatch({ type: 'REMOVE_ITEM', payload: id });
   };
 
   const updateQuantity = (id: string, quantity: number) => {
-    if (quantity < 1) {
-      removeItem(id);
-      return;
-    }
+    if (!id || quantity < 0) return;
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });
   };
 
@@ -121,17 +128,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLEAR_CART' });
   };
 
+  const value = {
+    items: state.items || [],
+    total: state.total || 0,
+    addItem,
+    removeItem,
+    updateQuantity,
+    clearCart,
+  };
+
   return (
-    <CartContext.Provider
-      value={{
-        items: state.items,
-        total: state.total,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clearCart,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

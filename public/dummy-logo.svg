@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="25" cy="25" r="24" fill="#FF0000" stroke="white" stroke-width="2"/>
+  
+  <!-- Letter M -->
+  <path d="M15 35V15L25 25L35 15V35" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Taco Shape -->
+  <path d="M10 20C10 20 15 15 25 15C35 15 40 20 40 20C40 20 35 25 25 25C15 25 10 20 10 20Z" stroke="white" stroke-width="2" fill="none"/>
+</svg> 

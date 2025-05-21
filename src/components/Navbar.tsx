@@ -14,10 +14,17 @@ export default function Navbar() {
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const scrollToMenu = () => {
+    const menuSection = document.getElementById('menu-section');
+    if (menuSection) {
+      menuSection.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/menu', label: 'Menu' },
-    { href: '/admin', label: 'Admin' }
+    { href: '/', label: 'Home', action: undefined },
+    { label: 'Menu', action: scrollToMenu }
   ];
 
   useEffect(() => {
@@ -62,29 +69,43 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`text-sm font-medium transition-all duration-300 ${
-                  isActivePath(href)
-                    ? isScrolled
-                      ? 'text-gray-800 dark:text-orange-400'
-                      : 'text-gray-800 dark:text-orange-400'
-                    : isScrolled
-                    ? 'text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-orange-400'
-                    : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
+            {navLinks.map(({ href, label, action }) => 
+              action ? (
+                <button
+                  key={label}
+                  onClick={action}
+                  className={`text-sm font-medium transition-all duration-300 ${
+                    isScrolled
+                      ? 'text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-[#FF0000]'
+                      : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  {label}
+                </button>
+              ) : (
+                <Link
+                  key={href}
+                  href={href!}
+                  className={`text-sm font-medium transition-all duration-300 ${
+                    isActivePath(href!)
+                      ? isScrolled
+                        ? 'text-gray-800 dark:text-[#FF0000]'
+                        : 'text-gray-800 dark:text-[#FF0000]'
+                      : isScrolled
+                      ? 'text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-[#FF0000]'
+                      : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  {label}
+                </Link>
+              )
+            )}
             <Link
               href="/cart"
               className={`relative px-6 py-2 rounded-full font-medium transition-all duration-300 ${
                 isScrolled
-                  ? 'bg-gray-800 text-white hover:bg-gray-900'
-                  : 'bg-gray-800 text-white hover:bg-gray-900'
+                  ? 'bg-[#FF0000] text-white hover:bg-[#CC0000]'
+                  : 'bg-[#FF0000] text-white hover:bg-[#CC0000]'
               }`}
             >
               <span className="flex items-center gap-2">
@@ -189,22 +210,36 @@ export default function Navbar() {
           }`}
         >
           <div className="py-4 space-y-3">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
-                  isActivePath(href)
-                    ? 'text-gray-800 dark:text-orange-400 bg-gray-100 dark:bg-gray-800'
-                    : isScrolled
-                    ? 'text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    : 'text-white hover:bg-white/10'
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
+            {navLinks.map(({ href, label, action }) => 
+              action ? (
+                <button
+                  key={label}
+                  onClick={action}
+                  className={`block w-full text-left px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
+                    isScrolled
+                      ? 'text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  {label}
+                </button>
+              ) : (
+                <Link
+                  key={href}
+                  href={href!}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-300 ${
+                    isActivePath(href!)
+                      ? 'text-gray-800 dark:text-[#FF0000] bg-gray-100 dark:bg-gray-800'
+                      : isScrolled
+                      ? 'text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                      : 'text-white hover:bg-white/10'
+                  }`}
+                >
+                  {label}
+                </Link>
+              )
+            )}
           </div>
         </div>
       </div>
