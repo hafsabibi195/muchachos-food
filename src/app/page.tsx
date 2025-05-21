@@ -43,10 +43,10 @@ export default function HomePage() {
       <Hero scrollToMenu={scrollToMenu} />
 
       {/* Featured Products Section */}
-      <section className="py-16 bg-white dark:bg-gray-800">
+      <section className="py-16 bg-amber-50 dark:bg-amber-900/20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
-            Popular Dishes
+          <h2 className="text-3xl font-bold text-center mb-12 text-amber-900 dark:text-amber-100">
+            Hot Offers
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.slice(0, 3).map((product) => (
@@ -60,9 +60,9 @@ export default function HomePage() {
       </section>
 
       {/* Full Menu Section */}
-      <section id="menu-section" className="py-16 bg-white dark:bg-gray-800">
+      <section id="menu-section" className="py-16 bg-amber-50 dark:bg-amber-900/20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
+          <h2 className="text-3xl font-bold text-center mb-12 text-amber-900 dark:text-amber-100">
             Our Complete Menu
           </h2>
           
@@ -74,8 +74,8 @@ export default function HomePage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-6 py-2 rounded-full font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'bg-[#FF0000] text-white'
-                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-[#FF0000]/10 dark:hover:bg-[#FF0000]/20'
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-white dark:bg-amber-900/30 text-amber-900 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-800/30'
                 }`}
               >
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -96,16 +96,16 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-white dark:bg-gray-800">
+      <section className="py-16 bg-amber-50 dark:bg-amber-900/20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
+          <h2 className="text-3xl font-bold text-center mb-12 text-amber-900 dark:text-amber-100">
             Why Choose Us
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#FF0000]/10 dark:bg-[#FF0000]/20 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-amber-100 dark:bg-amber-800/30 rounded-full flex items-center justify-center">
                 <svg
-                  className="w-8 h-8 text-[#FF0000]"
+                  className="w-8 h-8 text-amber-600 dark:text-amber-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -118,17 +118,17 @@ export default function HomePage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold mb-2 text-amber-900 dark:text-amber-100">
                 Fast Delivery
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-amber-800/80 dark:text-amber-200/80">
                 Hot and fresh food delivered to your doorstep in 30 minutes or less
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#FF0000]/10 dark:bg-[#FF0000]/20 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-amber-100 dark:bg-amber-800/30 rounded-full flex items-center justify-center">
                 <svg
-                  className="w-8 h-8 text-[#FF0000]"
+                  className="w-8 h-8 text-amber-600 dark:text-amber-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -141,17 +141,17 @@ export default function HomePage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold mb-2 text-amber-900 dark:text-amber-100">
                 Quality Food
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-amber-800/80 dark:text-amber-200/80">
                 Made with premium ingredients and prepared by expert chefs
               </p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 bg-[#FF0000]/10 dark:bg-[#FF0000]/20 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto mb-4 bg-amber-100 dark:bg-amber-800/30 rounded-full flex items-center justify-center">
                 <svg
-                  className="w-8 h-8 text-[#FF0000]"
+                  className="w-8 h-8 text-amber-600 dark:text-amber-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -164,10 +164,10 @@ export default function HomePage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold mb-2 text-amber-900 dark:text-amber-100">
                 Best Service
               </h3>
-              <p className="text-gray-600 dark:text-gray-300">
+              <p className="text-amber-800/80 dark:text-amber-200/80">
                 Friendly customer service and hassle-free ordering experience
               </p>
             </div>

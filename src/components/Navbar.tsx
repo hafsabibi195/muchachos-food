@@ -42,23 +42,23 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+          ? 'bg-yellow-400/90 dark:bg-yellow-500/90 backdrop-blur-md shadow-lg'
+          : 'bg-yellow-400 dark:bg-yellow-500'
       }`}
     >
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="relative w-8 h-8">
+            <div className="relative w-12 h-12">
               <Image
-                src="/images/logo.svg"
+                src="/dummy-logo.svg"
                 alt="Muchachos Food"
                 fill
                 className="object-contain"
               />
             </div>
-            <span className={`text-xl font-bold transition-colors duration-300 ${
+            <span className={`text-2xl font-bold transition-colors duration-300 ${
               isScrolled
                 ? 'text-gray-800 dark:text-white'
                 : 'text-gray-800 dark:text-white'
@@ -76,8 +76,8 @@ export default function Navbar() {
                   onClick={action}
                   className={`text-sm font-medium transition-all duration-300 ${
                     isScrolled
-                      ? 'text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-[#FF0000]'
-                      : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                      ? 'text-gray-600 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-500'
+                      : 'text-gray-800 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-500'
                   }`}
                 >
                   {label}
@@ -89,11 +89,11 @@ export default function Navbar() {
                   className={`text-sm font-medium transition-all duration-300 ${
                     isActivePath(href!)
                       ? isScrolled
-                        ? 'text-gray-800 dark:text-[#FF0000]'
-                        : 'text-gray-800 dark:text-[#FF0000]'
+                        ? 'text-orange-500 dark:text-orange-500'
+                        : 'text-orange-500 dark:text-orange-500'
                       : isScrolled
-                      ? 'text-gray-600 dark:text-gray-200 hover:text-gray-800 dark:hover:text-[#FF0000]'
-                      : 'text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white'
+                      ? 'text-gray-600 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-500'
+                      : 'text-gray-800 dark:text-gray-200 hover:text-orange-500 dark:hover:text-orange-500'
                   }`}
                 >
                   {label}
