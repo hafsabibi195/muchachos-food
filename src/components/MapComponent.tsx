@@ -15,25 +15,40 @@ interface MapComponentProps {
 
 const containerStyle = {
   width: '100%',
-  height: '300px'
+  height: '300px',
 };
 
 export default function MapComponent({ center, onLocationSelect }: MapComponentProps) {
-  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-    libraries: ['places']
+    libraries: ['places'],
   });
 
-  const onLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+  const updateLocation = useCallback(
+    async (lat: number, lng: number) => {
+      if (!window.google?.maps) return;
+
+      try {
+        const geocoder = new google.maps.Geocoder();
+        const response = await geocoder.geocode({
+          location: { lat, lng },
+        });
+
+        if (response.results[0]) {
+          const formattedAddress = response.results[0].formatted_address;
+          onLocationSelect({ lat, lng }, formattedAddress);
+        }
+      } catch (error) {
+        console.error('Failed to update location:', error);
+      }
+    },
+    [onLocationSelect]
+  );
 
   const onUnmount = useCallback(() => {
-    setMap(null);
     setMarker(null);
   }, []);
 
@@ -41,36 +56,24 @@ export default function MapComponent({ center, onLocationSelect }: MapComponentP
     setMarker(marker);
   }, []);
 
-  const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-    if (e.latLng && marker) {
-      marker.setPosition(e.latLng);
-      updateLocation(e.latLng.lat(), e.latLng.lng());
-    }
-  }, [marker]);
-
-  const handleMarkerDragEnd = useCallback((e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      updateLocation(e.latLng.lat(), e.latLng.lng());
-    }
-  }, []);
-
-  const updateLocation = async (lat: number, lng: number) => {
-    if (!window.google?.maps) return;
-
-    try {
-      const geocoder = new google.maps.Geocoder();
-      const response = await geocoder.geocode({
-        location: { lat, lng }
-      });
-
-      if (response.results[0]) {
-        const formattedAddress = response.results[0].formatted_address;
-        onLocationSelect({ lat, lng }, formattedAddress);
+  const handleMapClick = useCallback(
+    (e: google.maps.MapMouseEvent) => {
+      if (e.latLng && marker) {
+        marker.setPosition(e.latLng);
+        updateLocation(e.latLng.lat(), e.latLng.lng());
       }
-    } catch (error) {
-      console.error('Failed to update location:', error);
-    }
-  };
+    },
+    [marker, updateLocation]
+  );
+
+  const handleMarkerDragEnd = useCallback(
+    (e: google.maps.MapMouseEvent) => {
+      if (e.latLng) {
+        updateLocation(e.latLng.lat(), e.latLng.lng());
+      }
+    },
+    [updateLocation]
+  );
 
   if (!isLoaded) {
     return (
@@ -86,29 +89,28 @@ export default function MapComponent({ center, onLocationSelect }: MapComponentP
         mapContainerStyle={containerStyle}
         center={center}
         zoom={12}
-        onLoad={onLoad}
         onUnmount={onUnmount}
         onClick={handleMapClick}
         options={{
           styles: [
             {
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }
+              featureType: 'poi',
+              elementType: 'labels',
+              stylers: [{ visibility: 'off' }],
+            },
           ],
           mapTypeControl: false,
           streetViewControl: false,
-          fullscreenControl: false
+          fullscreenControl: false,
         }}
       >
         <Marker
           position={center}
-          draggable={true}
+          draggable
           onLoad={onMarkerLoad}
           onDragEnd={handleMarkerDragEnd}
         />
       </GoogleMap>
     </div>
   );
-} 
+}

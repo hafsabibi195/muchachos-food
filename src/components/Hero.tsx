@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
+// Removed unused imports:
+// import Link from 'next/link';
+// import Image from 'next/image';
 
 interface HeroProps {
   scrollToMenu: () => void;

@@ -13,18 +13,16 @@ export default function CheckoutPage() {
   const paymentMethod = searchParams.get('method') || 'card';
 
   useEffect(() => {
-    // Only redirect if cart was already cleared (prevents immediate redirect)
     if (items.length === 0 && !isCleared) {
       router.push('/cart');
       return;
     }
 
-    // Clear the cart after a delay
     if (!isCleared && items.length > 0) {
       const timer = setTimeout(() => {
         clearCart();
         setIsCleared(true);
-      }, 2000); // Increased delay to 2 seconds
+      }, 2000);
 
       return () => clearTimeout(timer);
     }
@@ -33,7 +31,6 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-4 pt-16">
       <div className="text-center max-w-xl mx-auto">
-        {/* Checkmark Icon with Animation */}
         <div className="mb-8 transform transition-all duration-700 animate-bounce">
           <svg
             className="w-24 h-24 text-green-500 mx-auto"
@@ -50,18 +47,16 @@ export default function CheckoutPage() {
           </svg>
         </div>
 
-        {/* Order Confirmation Message */}
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
           Order Confirmed!
         </h1>
 
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-          {paymentMethod === 'cash' 
+          {paymentMethod === 'cash'
             ? 'Thank you for your order! Please have the payment ready when your delicious meal arrives.'
             : 'Thank you for your order! Your payment has been processed successfully.'}
         </p>
 
-        {/* Order Details */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md mb-8">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Delivery Information
@@ -71,7 +66,7 @@ export default function CheckoutPage() {
               Your order will be delivered to your location in Islamabad.
             </p>
             <p className="text-gray-600 dark:text-gray-400">
-              Our delivery partner will contact you on your provided phone number when they're nearby.
+              Our delivery partner will contact you on your provided phone number when they&apos;re nearby.
             </p>
           </div>
 
@@ -84,11 +79,10 @@ export default function CheckoutPage() {
           <p className="text-gray-600 dark:text-gray-400">
             {paymentMethod === 'cash'
               ? 'Have your cash ready for payment upon delivery.'
-              : 'We\'ll send you an email with your order details and tracking information.'}
+              : 'We&apos;ll send you an email with your order details and tracking information.'}
           </p>
         </div>
 
-        {/* Return Home Button */}
         <Link
           href="/"
           className="inline-block bg-black text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg"
@@ -98,4 +92,4 @@ export default function CheckoutPage() {
       </div>
     </div>
   );
-} 
+}

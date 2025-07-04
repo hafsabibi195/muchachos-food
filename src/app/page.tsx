@@ -1,35 +1,19 @@
 'use client';
 
 import Hero from '@/components/Hero';
-import Image from 'next/image';
-import Link from 'next/link';
 import { products } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { useState } from 'react';
-import { Product } from '@/types';
-import { useCart } from '@/contexts/CartContext';
 import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { addItem } = useCart();
-  
-  // Get unique categories and convert Set to Array
+
   const categories = ['all', ...Array.from(new Set(products.map(product => product.category)))];
-  
-  // Filter products based on selected category
+
   const filteredProducts = selectedCategory === 'all'
     ? products
     : products.filter(product => product.category === selectedCategory);
-
-  const handleAddToCart = (product: Product) => {
-    addItem({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.imageUrl,
-    });
-  };
 
   const scrollToMenu = () => {
     const menuSection = document.getElementById('menu-section');
@@ -65,7 +49,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold text-center mb-12 text-amber-900 dark:text-amber-100">
             Our Complete Menu
           </h2>
-          
+
           {/* Category Filter */}
           <div className="flex flex-wrap gap-4 justify-center mb-12">
             {categories.map((category) => (

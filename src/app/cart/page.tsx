@@ -11,19 +11,14 @@ export default function CartPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Cleanup function
-    return () => {
-      // Any cleanup needed when component unmounts
-    };
+    return () => {};
   }, []);
 
   const handleCheckout = async () => {
     try {
-      // Add any pre-checkout logic here if needed
       await router.push('/payment');
     } catch (error) {
       console.error('Navigation error:', error);
-      // Optionally show an error message to the user
     }
   };
 
@@ -58,7 +53,7 @@ export default function CartPage() {
             Your cart is empty
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Looks like you haven't added any items to your cart yet.
+            Looks like you haven&apos;t added any items to your cart yet.
           </p>
           <Link
             href="/#menu-section"
@@ -79,9 +74,8 @@ export default function CartPage() {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items && items.length > 0 && items.map((item) => (
+            {items.map((item) => (
               <div
                 key={`cart-item-${item.id}`}
                 className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm flex gap-4"
@@ -103,7 +97,7 @@ export default function CartPage() {
                     </h3>
                     <button
                       type="button"
-                      onClick={() => item.id && handleRemoveItem(item.id)}
+                      onClick={() => handleRemoveItem(item.id)}
                       className="text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <svg
@@ -125,7 +119,9 @@ export default function CartPage() {
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => item.id && handleQuantityUpdate(item.id, (item.quantity || 1) - 1)}
+                        onClick={() =>
+                          handleQuantityUpdate(item.id, (item.quantity || 1) - 1)
+                        }
                         className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         -
@@ -135,14 +131,16 @@ export default function CartPage() {
                       </span>
                       <button
                         type="button"
-                        onClick={() => item.id && handleQuantityUpdate(item.id, (item.quantity || 1) + 1)}
+                        onClick={() =>
+                          handleQuantityUpdate(item.id, (item.quantity || 1) + 1)
+                        }
                         className="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
                         +
                       </button>
                     </div>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      Rs {((item.price || 0) * (item.quantity || 1))}
+                      Rs {(item.price || 0) * (item.quantity || 1)}
                     </span>
                   </div>
                 </div>
@@ -150,7 +148,6 @@ export default function CartPage() {
             ))}
           </div>
 
-          {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm sticky top-24">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -168,11 +165,11 @@ export default function CartPage() {
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-2 mt-2">
                   <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
                     <span>Total</span>
-                    <span>Rs {(total + 100)}</span>
+                    <span>Rs {total + 100}</span>
                   </div>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={handleCheckout}
                 className="w-full bg-orange-600 text-white py-3 rounded-full font-semibold hover:bg-orange-700 transition-colors"
               >
@@ -184,4 +181,4 @@ export default function CartPage() {
       </div>
     </div>
   );
-} 
+}
