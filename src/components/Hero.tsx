@@ -22,11 +22,7 @@ export default function Hero({ scrollToMenu }: HeroProps) {
             </h1>
 
             {/* Subtext */}
-            <p className="text-base sm:text-lg md:text-xl max-w-2xl animate-fade-in-up text-amber-800/80 dark:text-amber-200/80">
-              Experience the rich flavors of Mexico with our handcrafted dishes,
-              <br className="hidden md:block" />
-              made from fresh, locally-sourced ingredients.
-            </p>
+           
 
             {/* Location */}
             <p className="flex items-center justify-center gap-2 text-sm sm:text-base text-amber-800/80 dark:text-amber-200/80">
