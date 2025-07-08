@@ -6,7 +6,7 @@ interface HeroProps {
 
 export default function Hero({ scrollToMenu }: HeroProps) {
   return (
-    <section className="relative w-full bg-amber-50 dark:bg-amber-900/20 py-16 sm:py-20 lg:py-25">
+    <section className="relative w-full bg-amber-50 dark:bg-amber-900/20 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-25">
       <div className="container mx-auto px-4 flex flex-col items-center text-center space-y-6 sm:space-y-8">
 
         {/* Heading */}
