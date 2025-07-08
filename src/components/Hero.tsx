@@ -6,8 +6,9 @@ interface HeroProps {
 
 export default function Hero({ scrollToMenu }: HeroProps) {
   return (
-    <section className="relative w-full bg-amber-50 dark:bg-amber-900/20 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-25">
-      <div className="container mx-auto px-4 flex flex-col items-center text-center space-y-6 sm:space-y-8">
+    <section className="relative w-full bg-amber-50 dark:bg-amber-900/20 pt-28 pb-16 sm:pt-32 sm:pb-20
+     lg:pt-26 lg:pb-25">
+      <div className="container mx-auto px-4 flex flex-col items-center text-center space-y-6 sm:space-y-6">
 
         {/* Heading */}
         <h1 className="text-xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-snug break-words animate-fade-in text-amber-900 dark:text-amber-100 px-2">
